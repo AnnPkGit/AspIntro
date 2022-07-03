@@ -1,0 +1,29 @@
+﻿DATA = Data Access Layer - "Слой" работы с данными
+Слой согласования БД (или другого источника данных)
+и слоя логгики (BLL - Businnes Logic layer)
+По-простому, то это "перевод" сущностей БД (таблиц) в сущности языка
+(объектов/коллекций)
+
+В ASP EntityFrameworkCore 
+
+Для работы с ним устанавливаем NuGet: 
+Microsoft.EntityFrameworkCore, 
+Microsoft.EntityFrameworkCore.SqlSe
+Microsoft.EntityFrameworkCore.Tools 
+
+1. Структура 
+   Создаем папки
+   DAL
+     Context 
+     Entities
+2. Сущности - классы, "отражающие" структуру данных таблицы
+В папке Entities слздаем класс User 
+
+3. В папке контекст описываем сам конекст данных и его классы конфигураций. 
+IntroContext
+UsersConfiguration 
+
+Tools-> NuGet -> Pm Console 
+PM> Add-Migration Init 
+PM> Update-Database
+   

@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<p>
+    @ViewData["rnd"]
+    @*@Html.Raw(ViewData["rnd"])*@
+</p>
+
+<i>
+    @ViewBag.hash
+</i>
+
+<p>
+    @ViewBag.date
+</p>
+<p>
+    @ViewBag.time
+</p>
+<p>
+    Users Count : @ViewData["UsersCount"]
+</p>
+
+<table>
+<tbody>
+ @foreach(var userName in @ViewBag.userNames)
+  {
+   <tr>
+      <td>@userName</td>
+   </tr>
+  }
+</tbody>
+</table>
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
