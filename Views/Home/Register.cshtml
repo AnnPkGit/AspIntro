@@ -1,71 +1,37 @@
 ﻿@{
+    var err = ViewData["err"] as String[];
 }
 <h1>
-    Регистрация нового пользователя 
+    Регистрация нового пользователя
 </h1>
-
-@{
-    var err = ViewData["err"] as string[];   
-}
-
-@{
-    var inputValues = new string[3];
-    if(ViewData["inputValues"] as string[] != null)
-    {
-        inputValues = ViewData["inputValues"] as string[];
-    }
-}
-
-<form action="/Home/RegUser" method="post">
-    Имя: <input type="text" name="RealName" value = "@inputValues[0]"/> 
-    @if(! String.IsNullOrEmpty(err?[1]))
+<form 
+    action="/Home/RegUser" 
+    method="post" 
+    enctype="multipart/form-data"
+>
+    Имя:    <input type="text"     name="RealName"  />
+    @if (!String.IsNullOrEmpty(err?[1]))
     {
         @err[1]
-        
     }
     <br/>
-
-    Логин: <input type="text"  name="Login" value ="@inputValues[1]"/>
+    Логин:  <input type="text"     name="Login"     />
     @if (!String.IsNullOrEmpty(err?[2]))
     {
         @err[2]
-
-    }  
-    <br/>
-
-    Пароль: <input type="password" name="Password1"/> 
-    @if(! String.IsNullOrEmpty(err?[3]))
-    {
-        @err[3]
-        
     }
     <br/>
-
-    Пароль: <input type="password" name="Password2"/>
-    @if(! String.IsNullOrEmpty(err?[4]))
-    {
-        @err[4]
-        
-    }
-    <br/>
-
-    E-mail: <input type="email" name="Email" value ="@inputValues[2]"/>     
-    @if(! String.IsNullOrEmpty(err?[5]))
-    {
-        @err[5]
-        
-    }
-    <br/>
-
-    <button>Зарегестрироваться</button>
+    Пароль:   <input type="password" name="Password1" /><br/>
+    Повтор:   <input type="password" name="Password2" /><br/>
+    E-mail:   <input type="email"    name="Email"     /><br/>
+    Аватарка: <input type="file"     name="Avatar"    /><br/>
+    <button type="submit">Зарегистрироваться</button>
 </form>
 
-@*@if(err != null)
+@{
+    var UserData = ViewData["UserData"] as RegUserModel; 
+}
+@if(UserData?.Avatar != null)
 {
-    @foreach(string er in err)
-    {
-        <p>
-            @er
-        </p>
-    }
-}*@
+    <img src="/img/@UserData.Avatar.FileName" />
+}
