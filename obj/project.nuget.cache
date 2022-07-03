@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "bfAMvoJtziBHn0g9S3p6DWmiSsNrlJj/xyydwh4VRkP5VJap7fccv7MUkbfSoezGhY3lyXDz05nmBsbcHTgoLw==",
+  "dgSpecHash": "oMToKM+IHmFTXV9C4Kui1QDu5xa2dtE1ilvkSjDn71625F195hvH+CJB8+UXUHi/JlBnp8rudAv7S9+OJsKKmA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\96205\\Desktop\\Files\\ASP\\FirstProjAsp\\Intro\\Intro.csproj",
+  "projectFilePath": "C:\\Users\\96205\\Desktop\\Files\\GIT\\WordChecker\\AspIntro\\Intro.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\96205\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\96205\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
