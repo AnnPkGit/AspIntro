@@ -81,7 +81,9 @@ namespace Intro.Controllers
                 {
                     err[5] = "Email не может быть пустым";
                 }
-                if( UserData.Avatar != null )  // есть переданный файл
+
+                var currentImgName = UserData.Avatar?.FileName;
+                if ( UserData.Avatar != null )  // есть переданный файл
                 {
                     // файл нужно сохранить в нужном месте.
                     // для простоты доступа - в папку wwwroot/img
@@ -92,9 +94,31 @@ namespace Intro.Controllers
                     // Д.З. Сформировать новое имя файла, сохранить расширение,
                     //   убедиться, что файл не стирает к-то другой файл
 
+                    var filesInDir = Directory.GetFiles("./wwwroot/img");
+                    var filesInDirCount = filesInDir.Count();
+                    var noSameNameCount = 0;
+
+                    do
+                    {
+                        noSameNameCount = 0;
+                        foreach (var file in filesInDir)
+                        {
+                            var indexOfLastSlash = file.LastIndexOf('\\');
+                            // -1 because i don't need slash in file name
+                            var thisFileName = file.Substring(indexOfLastSlash + 1, file.Length - indexOfLastSlash - 1);
+
+                            if (thisFileName == currentImgName)
+                            {
+                                currentImgName += Guid.NewGuid().ToString();
+                                break;
+                            }
+                            noSameNameCount++;
+                        }
+                    } while (filesInDirCount != noSameNameCount);
+
                     UserData.Avatar.CopyToAsync(
                         new FileStream(
-                            "./wwwroot/img/" + UserData.Avatar.FileName, 
+                            "./wwwroot/img/" + currentImgName,
                             FileMode.Create));
                 }
                 // если валидация пройдена, то добавляем пользователя в БД
@@ -111,7 +135,7 @@ namespace Intro.Controllers
                     user.PassSalt = _hasher.Hash(DateTime.Now.ToString());
                     user.PassHash = _hasher.Hash(
                         UserData.Password1 + user.PassSalt);  // соль "смешивается" с паролем
-                    user.Avatar = UserData.Avatar.FileName;   // заменить по результатам ДЗ
+                    user.Avatar = currentImgName;   // заменить по результатам ДЗ
                     user.Email = UserData.Email;
                     user.RealName = UserData.RealName;
                     user.Login = UserData.Login;
