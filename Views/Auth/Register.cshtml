@@ -4,18 +4,21 @@
 <h1>
     Регистрация нового пользователя
 </h1>
+
+@ViewData["Error"]
+
 <form 
-    action="/Home/RegUser" 
+    action="/Auth/RegUser" 
     method="post" 
     enctype="multipart/form-data"
 >
-    Имя:    <input type="text"     name="RealName"  />
+    Имя:    <input type="text"     name="RealName"/>
     @if (!String.IsNullOrEmpty(err?[1]))
     {
         @err[1]
     }
     <br/>
-    Логин:  <input type="text"     name="Login"     />
+    Логин:  <input type="text"     name="Login"/>
     @if (!String.IsNullOrEmpty(err?[2]))
     {
         @err[2]
