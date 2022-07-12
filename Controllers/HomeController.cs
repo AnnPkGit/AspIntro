@@ -17,17 +17,20 @@ namespace Intro.Controllers
         private readonly RandomService _randomService;
         private readonly IHasher _hasher;
         private readonly DAL.Context.IntroContext _introContext;
+        private readonly IAuthService _authService;
 
         public HomeController(              // Внедрение зависимостей
             ILogger<HomeController> logger, // через конструктор
             RandomService randomService,
             IHasher hasher,
-            DAL.Context.IntroContext introContext)  
+            DAL.Context.IntroContext introContext,
+            IAuthService authService)  
         {
             _logger = logger;
             _randomService = randomService;
             _hasher = hasher;
             _introContext = introContext;
+            _authService = authService;
         }
 
         public IActionResult Index()
@@ -36,8 +39,13 @@ namespace Intro.Controllers
             ViewBag.hash = _hasher.Hash("123");
             ViewData["UsersCount"] = _introContext.Users.Count();
             ViewBag.userNames = _introContext.Users.Select(user => user.RealName);
+            ViewData["fromAuthMiddleware"] = HttpContext.Items["fromAuthMiddleware"];
+
+            ViewData["authUserName"] = _authService.User?.RealName;
             return View();
         }
+
+
 
         public IActionResult Privacy()
         {
