@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Intro.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -30,9 +31,12 @@ namespace Intro.Controllers
                 ViewData["err"] = err.Split(";");
                 HttpContext.Session.Remove("RegError");
 
-                Models.RegUserModel UserData = JsonConvert.DeserializeObject<Models.RegUserModel>
-                    (HttpContext.Session.GetString("userData"));
-                ViewData["UserData"] = HttpContext.Session.GetString("UserData");
+                if (HttpContext.Session.GetString("userData") != null)
+                {
+                    Models.RegUserModel UserData = JsonConvert.DeserializeObject<Models.RegUserModel>
+                        (HttpContext.Session.GetString("userData"));
+                    ViewData["UserData"] = HttpContext.Session.GetString("UserData");
+                }
             }
             return View();
         }
@@ -51,9 +55,21 @@ namespace Intro.Controllers
             }
             else
             {
+                if (String.IsNullOrEmpty(UserData.RealName))
+                {
+                    err[1] = "Имя не может быть пустым";
+                }
                 if (String.IsNullOrEmpty(UserData.Login))
                 {
                     err[2] = "Логин не может быть пустым";
+                }
+                if (String.IsNullOrEmpty(UserData.Login))
+                {
+                    err[3] = "Пароль не может быть пустым";
+                }
+                if (String.IsNullOrEmpty(UserData.Login))
+                {
+                    err[4] = "Пароль не может быть пустым";
                 }
                 if (String.IsNullOrEmpty(UserData.Email))
                 {
