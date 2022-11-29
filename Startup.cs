@@ -1,3 +1,4 @@
+using Intro.Middleware;
 using Intro.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -37,6 +38,8 @@ namespace Intro
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+
+            services.AddScoped<IAuthService, SessionAuthService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +60,10 @@ namespace Intro
             app.UseAuthorization();
 
             app.UseSession();
+
+            //app.UseMiddleware<Middleware.SessionAuthMiddleware>();
+
+            app.UseSessionAuth();
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Intro.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace Intro.Controllers
 {
@@ -24,15 +26,20 @@ namespace Intro.Controllers
         public IActionResult Register()
         {
             String err = HttpContext.Session.GetString("RegError");
-            if(err != null)
+            String values = HttpContext.Session.GetString("Values");
+            if (err != null)
             {
                 ViewData["Error"] = err;
                 ViewData["err"] = err.Split(";");
+                ViewData["values"] = values.Split(";");
                 HttpContext.Session.Remove("RegError");
 
-                Models.RegUserModel UserData = JsonConvert.DeserializeObject<Models.RegUserModel>
-                    (HttpContext.Session.GetString("userData"));
-                ViewData["UserData"] = HttpContext.Session.GetString("UserData");
+                if (HttpContext.Session.GetString("userData") != null)
+                {
+                    Models.RegUserModel UserData = JsonConvert.DeserializeObject<Models.RegUserModel>
+                        (HttpContext.Session.GetString("userData"));
+                    ViewData["UserData"] = HttpContext.Session.GetString("UserData");
+                }
             }
             return View();
         }
@@ -44,6 +51,11 @@ namespace Intro.Controllers
         {
             // return Json(UserData);  // способ проверить передачу данных
             String[] err = new String[6];
+            String[] values = new String[3];
+
+            values[0] = UserData.RealName;
+            values[1] = UserData.Login;
+            values[2] = UserData.Email;
 
             if (UserData == null)
             {
@@ -51,9 +63,21 @@ namespace Intro.Controllers
             }
             else
             {
+                if (String.IsNullOrEmpty(UserData.RealName))
+                {
+                    err[1] = "Имя не может быть пустым";
+                }
                 if (String.IsNullOrEmpty(UserData.Login))
                 {
                     err[2] = "Логин не может быть пустым";
+                }
+                if (String.IsNullOrEmpty(UserData.Password1))
+                {
+                    err[3] = "Пароль не может быть пустым";
+                }
+                if (String.IsNullOrEmpty(UserData.Password2))
+                {
+                    err[4] = "Пароль не может быть пустым";
                 }
                 if (String.IsNullOrEmpty(UserData.Email))
                 {
@@ -95,11 +119,18 @@ namespace Intro.Controllers
                     user.Login = UserData.Login;
                     user.RegMoment = DateTime.Now;
 
-                    // добавляем в БД (контекст)
-                    _introContext.Users.Add(user);
+                    if (_introContext.Users.Select(user => user.Login == user.Login).First())
+                    {
+                        err[2] = "Логин занят";
+                    }
+                    else
+                    {
+                        // добавляем в БД (контекст)
+                        _introContext.Users.Add(user);
 
-                    // сохраняем изменения
-                    _introContext.SaveChanges();
+                        // сохраняем изменения
+                        _introContext.SaveChanges();
+                    }
                 }
             }
             UserData.Password1 = String.Empty;
@@ -114,6 +145,7 @@ namespace Intro.Controllers
             HttpContext.Session.SetString(
                 "RegError",
                 String.Join(";", err));
+            HttpContext.Session.SetString("Values", String.Join(";", values));
 
             // Sessin - хранит значимые типы 
 

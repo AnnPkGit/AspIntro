@@ -21,6 +21,14 @@
     Users Count : @ViewData["UsersCount"]
 </p>
 
+<p>
+    @ViewData["fromAuthMiddleware"]
+</p>
+
+<p>
+    authUserName @ViewData["authUserName"]
+</p>
+
 <table>
 <tbody>
  @foreach(var userName in @ViewBag.userNames)
